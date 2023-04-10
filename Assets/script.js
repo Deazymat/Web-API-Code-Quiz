@@ -64,10 +64,54 @@ var onePieceQuestions = [
 ];
 startButton.addEventListener("click", function () {
   console.log("Hello");
+  var timeleft = 10;
+  var downloadTimer = setInterval(function () {
+    if (timeleft <= 0) {
+        gameOver()
+      clearInterval(downloadTimer);
+    }
+    document.getElementById("timer").textContent = timeleft;
+    timeleft -= 1;
+  }, 1000);
   var currentQuestion = onePieceQuestions[index];
   question.textContent = currentQuestion.question;
   button1.textContent = currentQuestion.options[0];
+ button1.addEventListener('click', nextQuestion)
   button2.textContent = currentQuestion.options[1];
+ button2.addEventListener("click", nextQuestion);
   button3.textContent = currentQuestion.options[2];
+ button3.addEventListener("click", nextQuestion);
   button4.textContent = currentQuestion.options[3];
+ button4.addEventListener("click", nextQuestion);
 });
+
+function nextQuestion() {
+// Check if right or wrong
+index ++
+if(index >= onePieceQuestions.length){
+    gameOver()
+}
+else {
+     console.log("Hello");
+     var currentQuestion = onePieceQuestions[index];
+     question.textContent = currentQuestion.question;
+     button1.textContent = currentQuestion.options[0];
+     button1.addEventListener("click", nextQuestion);
+     button2.textContent = currentQuestion.options[1];
+     button2.addEventListener("click", nextQuestion);
+     button3.textContent = currentQuestion.options[2];
+     button3.addEventListener("click", nextQuestion);
+     button4.textContent = currentQuestion.options[3];
+     button4.addEventListener("click", nextQuestion);
+
+
+}
+
+}
+
+function gameOver() {
+// Shows game over 
+console.log ("gameOver")
+
+
+}
