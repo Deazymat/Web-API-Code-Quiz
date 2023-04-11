@@ -153,7 +153,18 @@ function gameOver() {
   initialsLabel.textContent = "Enter your initials: ";
   document.body.appendChild(initialsLabel);
 
+  // creating input field for initials
+  var initialsLabel = document.createElement("input");
+  submitButton.type = "submit";
+  submitButton.value = "submit";
+  submitButton.id = "submitButton";
+  submitButton.addEventListener("click", function () {
+    var initials = initialsInput.value;
+    if (initials.length > 0) {
+      console.log("initials:" + initials);
+    }
+  });
 }
-  // show score and hide questions and answers
-  // show a input to show their ints.
-  // when they type their ints. and submit saved to local storage.
+// show score and hide questions and answers
+// show a input to show their ints.
+// when they type their ints. and submit saved to local storage.
