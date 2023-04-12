@@ -1,17 +1,16 @@
 
 var startButton = document.getElementById("startButton");
-
 var characters = ["Luffy", "Nami", "Chopper", "Zoro", "Jimbei", "Sanji"];
 var button1 = document.getElementById("choice1");
 var button2 = document.getElementById("choice2");
 var button3 = document.getElementById("choice3");
 var button4 = document.getElementById("choice4");
-
 var question = document.getElementById("question");
 var index = 0;
 var score = 0;
 var correctAnswers = 0;
 var incorrectAnswers = 0;
+var gameIsOver = false;
 // added score
 var onePieceQuestions = [
   {
@@ -106,8 +105,8 @@ function nextQuestion(event) {
   }
 }
 function gameOver() {
-    if (gameIsOver) return;
-    gameIsOver = true
+  if (gameIsOver) return;
+  gameIsOver = true;
   console.log("gameOver");
   // Shows game over
   score = correctAnswers * 10;
@@ -124,12 +123,12 @@ function gameOver() {
   document.body.appendChild(gameOverText);
 
   var correctAnswersText = document.createElement("p");
-  correctAnswersText.textContent = "Correct answers:" + correctAnswers;
+  correctAnswersText.textContent = "Correct answers: " + correctAnswers;
   document.body.appendChild(correctAnswersText);
 
   var incorrectAnswersText = document.createElement("p");
-  incorrectAnswersText.textContent = "Incorrect answers:" + incorrectAnswers;
-  document.body.appendChild(incorrectAnswers);
+  incorrectAnswersText.textContent = "Incorrect answers: " + incorrectAnswers;
+  document.body.appendChild(incorrectAnswersText);
 
   var scoreText = document.createElement("p");
   scoreText.textContent = "Your score: " + score;
@@ -145,21 +144,41 @@ function gameOver() {
   initialsInput.id = "initialsInput";
   document.body.appendChild(initialsInput);
 
-  // creating input field for initials
+  var resetScoresButton = document.createElement("button");
+  resetScoresButton.textContent = "Reset Scores";
+  resetScoresButton.addEventListener("click", resetScores);
+  document.body.appendChild(resetScoresButton);
+  
+  function resetScores() {
+    localStorage.removeItem("highScores");
+    displayHighScores();
+  }
+
+  var goBackButton = document.createElement("button");
+  goBackButton.textContent = "Go Back";
+  goBackButton.addEventListener("click", resetQuiz);
+  document.body.appendChild(goBackButton);
+
+  function resetQuiz() {
+    location.reload();
+  }
+
   var submitButton = document.createElement("input");
   submitButton.type = "submit";
-  submitButton.value = "submit";
+  submitButton.value = "Submit";
   submitButton.id = "submitButton";
   submitButton.addEventListener("click", function () {
     var initials = initialsInput.value;
     if (initials.length > 0) {
-      console.log("initials:" + initials);
+      console.log("initials: " + initials);
       saveHighScore(initials, score);
       displayHighScores();
     }
   });
-
   document.body.appendChild(submitButton);
+
+
+  
   function saveHighScore(initials, score) {
     var highScore = JSON.parse(localStorage.getItem("highScores")) || [];
     var newScore = {
@@ -174,8 +193,16 @@ function gameOver() {
   }
 
   function displayHighScores() {
-    var highScores = JSON.parse(localStorage.getItem("highScore")) || [];
+    var highScores = JSON.parse(localStorage.getItem("highScores")) || [];
+
+    // Remove the previous high scores list if it exists
+    var existingList = document.getElementById("highScoresList");
+    if (existingList) {
+      existingList.parentNode.removeChild(existingList);
+    }
+
     var highScoresList = document.createElement("ol");
+    highScoresList.id = "highScoresList"; // Set an id for easy reference
 
     highScores.forEach((score) => {
       var listItem = document.createElement("li");
@@ -185,5 +212,7 @@ function gameOver() {
 
     document.body.appendChild(highScoresList);
   }
+
+
 }
 
