@@ -1,26 +1,3 @@
-// AS A coding boot camp student
-// I WANT to take a timed quiz on JavaScript fundamentals that stores high scores
-// SO THAT I can gauge my progress compared to my peers
-
-// ## Acceptance Criteria
-
-// GIVEN I am taking a code quiz
-// WHEN I click the start button
-// THEN a timer starts and I am presented with a question
-// WHEN I answer a question
-// THEN I am presented with another question
-// WHEN I answer a question incorrectly
-// THEN time is subtracted from the clock
-// WHEN all questions are answered or the timer reaches 0
-// THEN the game is over
-// WHEN the game is over
-// THEN I can save my initials and my score
-// Who is the main character in One Piece = Luffy
-// Who is the Navigator in One piece = Nami
-// Who is the Doctor in One piece = Chopper
-// WHo is the Swordsmen in One piece = Zoro
-// who is the newest crewmate to the straw hats in one piece jimbei
-// who is the cook for the straw hats = sanji
 
 var startButton = document.getElementById("startButton");
 
@@ -80,6 +57,12 @@ startButton.addEventListener("click", function (event) {
     timeLeft -= 1;
   }, 1000);
 
+  displayQuestion();
+  startButton.style.display = "none";
+});
+
+function displayQuestion() {
+
   var currentQuestion = onePieceQuestions[index];
   question.textContent = currentQuestion.question;
   button1.textContent = currentQuestion.options[0];
@@ -92,23 +75,24 @@ startButton.addEventListener("click", function (event) {
   button4.addEventListener("click", nextQuestion);
 
   startButton.style.display = "none";
-});
+};
 
 function nextQuestion(event) {
   // Check if right or wrong
-  console.log(event.target.textContent);
-  if (event.target.textContent == onePieceQuestions[index].answer) {
-    console.log("correct");
+
+  if (event.target.textContent === onePieceQuestions[index].answer) {
+    correctAnswers++;
   } else {
+    incorrectAnswers++;
     timeLeft -= 5;
     document.getElementById("timer").textContent = timeLeft;
-    console.log("incorrect");
   }
   index++;
   if (index >= onePieceQuestions.length) {
     gameOver();
   } else {
-    console.log("Hello");
+    displayQuestion();
+
     var currentQuestion = onePieceQuestions[index];
     question.textContent = currentQuestion.question;
     button1.textContent = currentQuestion.options[0];
@@ -119,13 +103,14 @@ function nextQuestion(event) {
     button3.addEventListener("click", nextQuestion);
     button4.textContent = currentQuestion.options[3];
     button4.addEventListener("click", nextQuestion);
-
   }
 }
-
 function gameOver() {
-  // Shows game over
+    if (gameIsOver) return;
+    gameIsOver = true
   console.log("gameOver");
+  // Shows game over
+  score = correctAnswers * 10;
 
   // Hiding questions and answers
   question.style.display = "none";
@@ -133,7 +118,6 @@ function gameOver() {
   button2.style.display = "none";
   button3.style.display = "none";
   button4.style.display = "none";
-
 
   var gameOverText = document.createElement("h2");
   gameOverText.textContent = "Game Over";
@@ -170,9 +154,36 @@ function gameOver() {
     var initials = initialsInput.value;
     if (initials.length > 0) {
       console.log("initials:" + initials);
+      saveHighScore(initials, score);
+      displayHighScores();
     }
   });
+
+  document.body.appendChild(submitButton);
+  function saveHighScore(initials, score) {
+    var highScore = JSON.parse(localStorage.getItem("highScores")) || [];
+    var newScore = {
+      initials: initials,
+      score: score,
+    };
+    highScore.push(newScore);
+    highScore.sort((a, b) => b.score - a.score);
+    highScore = highScore.slice(0, 5);
+
+    localStorage.setItem("highScores", JSON.stringify(highScore));
+  }
+
+  function displayHighScores() {
+    var highScores = JSON.parse(localStorage.getItem("highScore")) || [];
+    var highScoresList = document.createElement("ol");
+
+    highScores.forEach((score) => {
+      var listItem = document.createElement("li");
+      listItem.textContent = `${score.initials} - ${score.score}`;
+      highScoresList.appendChild(listItem);
+    });
+
+    document.body.appendChild(highScoresList);
+  }
 }
-// show score and hide questions and answers
-// show a input to show their ints.
-// when they type their ints. and submit saved to local storage.
+
