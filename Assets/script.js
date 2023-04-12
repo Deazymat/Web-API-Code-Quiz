@@ -29,11 +29,12 @@ var button1 = document.getElementById("choice1");
 var button2 = document.getElementById("choice2");
 var button3 = document.getElementById("choice3");
 var button4 = document.getElementById("choice4");
-var button5 = document.getElementById("choice5");
-var button6 = document.getElementById("choice6");
+
 var question = document.getElementById("question");
 var index = 0;
 var score = 0;
+var correctAnswers = 0;
+var incorrectAnswers = 0;
 // added score
 var onePieceQuestions = [
   {
@@ -58,7 +59,7 @@ var onePieceQuestions = [
   },
   {
     question: "Who is the newest crewmate to the straw hats in one piece?",
-    options: ["Luffy", "Nami", "Jembi", "Zoro"],
+    options: ["Luffy", "Nami", "Jimbei", "Zoro"],
     answer: "Jimbei",
   },
   {
@@ -67,18 +68,18 @@ var onePieceQuestions = [
     answer: "Sanji",
   },
 ];
-var timeleft = 30;
+var timeLeft = 30;
 startButton.addEventListener("click", function (event) {
   console.log("Hello");
-
   var downloadTimer = setInterval(function () {
-    if (timeleft <= 0) {
+    if (timeLeft <= 0) {
       gameOver();
       clearInterval(downloadTimer);
     }
-    document.getElementById("timer").textContent = timeleft;
-    timeleft -= 1;
+    document.getElementById("timer").textContent = timeLeft;
+    timeLeft -= 1;
   }, 1000);
+
   var currentQuestion = onePieceQuestions[index];
   question.textContent = currentQuestion.question;
   button1.textContent = currentQuestion.options[0];
@@ -89,10 +90,7 @@ startButton.addEventListener("click", function (event) {
   button3.addEventListener("click", nextQuestion);
   button4.textContent = currentQuestion.options[3];
   button4.addEventListener("click", nextQuestion);
-  button4.textContent = currentQuestion.options[4];
-  button4.addEventListener("click", nextQuestion);
-  button5.textContent = currentQuestion.options[5];
-  button5.addEventListener("click", nextQuestion);
+
   startButton.style.display = "none";
 });
 
@@ -102,8 +100,8 @@ function nextQuestion(event) {
   if (event.target.textContent == onePieceQuestions[index].answer) {
     console.log("correct");
   } else {
-    timeleft -= 5;
-    document.getElementById("timer").textContent = timeleft;
+    timeLeft -= 5;
+    document.getElementById("timer").textContent = timeLeft;
     console.log("incorrect");
   }
   index++;
@@ -121,10 +119,7 @@ function nextQuestion(event) {
     button3.addEventListener("click", nextQuestion);
     button4.textContent = currentQuestion.options[3];
     button4.addEventListener("click", nextQuestion);
-    button5.textContent = currentQuestion.options[4];
-    button5.addEventListener("click", nextQuestion);
-    button6.textContent = currentQuestion.options[5];
-    button6.addEventListener("click", nextQuestion);
+
   }
 }
 
@@ -138,12 +133,19 @@ function gameOver() {
   button2.style.display = "none";
   button3.style.display = "none";
   button4.style.display = "none";
-  button5.style.display = "none";
-  button6.style.display = "none";
+
 
   var gameOverText = document.createElement("h2");
   gameOverText.textContent = "Game Over";
   document.body.appendChild(gameOverText);
+
+  var correctAnswersText = document.createElement("p");
+  correctAnswersText.textContent = "Correct answers:" + correctAnswers;
+  document.body.appendChild(correctAnswersText);
+
+  var incorrectAnswersText = document.createElement("p");
+  incorrectAnswersText.textContent = "Incorrect answers:" + incorrectAnswers;
+  document.body.appendChild(incorrectAnswers);
 
   var scoreText = document.createElement("p");
   scoreText.textContent = "Your score: " + score;
@@ -153,8 +155,14 @@ function gameOver() {
   initialsLabel.textContent = "Enter your initials: ";
   document.body.appendChild(initialsLabel);
 
+  var initialsInput = document.createElement("input");
+  initialsInput.type = "text";
+  initialsInput.maxLength = "4";
+  initialsInput.id = "initialsInput";
+  document.body.appendChild(initialsInput);
+
   // creating input field for initials
-  var initialsLabel = document.createElement("input");
+  var submitButton = document.createElement("input");
   submitButton.type = "submit";
   submitButton.value = "submit";
   submitButton.id = "submitButton";
