@@ -16,6 +16,12 @@ The quiz tests your knowledge on the One Piece manga and anime, with questions r
 
 ---
 
+## Resources
+
+https://www.w3schools.com/js/js_intro.asp
+https://developer.mozilla.org/en-US/docs/Web/JavaScript
+---
+
 ## Contact ☎️
 
 - [Deazymat](https://github.com/Deazymat/Project-1)
